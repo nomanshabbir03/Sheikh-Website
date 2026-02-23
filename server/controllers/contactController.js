@@ -3,7 +3,7 @@
 // Saves to Supabase contacts table + sends email notification
 
 import { supabase } from '../config/supabase.js'
-import { sendContactNotification } from '../utils/mailer.js'
+import { sendContactNotification } from '../utils/Mailer.js'
 
 // POST /api/contact
 export async function submitContact(req, res, next) {

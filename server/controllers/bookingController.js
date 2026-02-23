@@ -3,7 +3,7 @@
 // Saves to Supabase bookings table + sends email notification
 
 import { supabase } from '../config/supabase.js'
-import { sendBookingNotification } from '../utils/mailer.js'
+import { sendBookingNotification } from '../utils/Mailer.js'
 
 // POST /api/bookings
 export async function submitBooking(req, res, next) {
