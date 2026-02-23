@@ -1,0 +1,114 @@
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.subtitle {
+  max-width: 700px;
+  margin: 20px auto 0;
+  color: var(--mid);
+}
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.filterBtn {
+  background: transparent;
+  border: 1px solid var(--mid);
+  color: var(--white);
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 13px;
+  transition: 0.3s ease;
+}
+
+.filterBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.active {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 100px;
+}
+
+.card {
+  background: var(--charcoal);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.imagePlaceholder {
+  height: 180px;
+  background: var(--steel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  color: var(--gold);
+}
+
+.content {
+  padding: 20px;
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--mid);
+  margin: 8px 0;
+}
+
+.description {
+  font-size: 14px;
+  color: var(--mid);
+}
+
+.pressStrip {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.pressLogos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+  font-family: var(--mono);
+  color: var(--mid);
+}
+
+.cta {
+  background: var(--navy);
+  text-align: center;
+  padding: 60px 20px;
+  border-radius: 12px;
+}
+
+.message {
+  color: var(--mid);
+}
+
+.error {
+  color: red;
+}

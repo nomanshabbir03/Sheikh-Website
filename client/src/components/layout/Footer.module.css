@@ -1,0 +1,198 @@
+/* Footer.module.css - All styles for the site footer component */
+
+/* ── PLATFORM STRIP ── */
+.platformStrip {
+  background: var(--charcoal);
+  border-bottom: 1px solid rgba(201,162,39,0.15);
+  padding: 28px 6%;
+}
+
+.platformStripTitle {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.platformGrid {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.platformCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 88px;
+}
+
+.platformCard:hover {
+  border-color: rgba(201,162,39,0.4);
+  background: rgba(201,162,39,0.06);
+  transform: translateY(-2px);
+}
+
+.platformIcon {
+  font-size: 20px;
+}
+
+.platformName {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+.platformHandle {
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ── MAIN FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.55);
+  padding: 48px 6% 28px;
+}
+
+.footerTop {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 44px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 24px;
+}
+
+/* Brand column */
+.footerLogo {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  display: block;
+  margin-bottom: 6px;
+  text-decoration: none;
+}
+
+.footerLogo span {
+  color: var(--gold);
+}
+
+.footerHandle {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.footerBrandText {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.4);
+}
+
+/* Nav columns */
+.footerCol h5 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.footerCol ul {
+  list-style: none;
+}
+
+.footerCol ul li {
+  margin-bottom: 9px;
+}
+
+.footerCol ul li a {
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footerCol ul li a:hover {
+  color: var(--gold);
+}
+
+/* Footer bottom */
+.footerBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footerBottom a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.footerBottomHandle {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .footerTop {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footerTop {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .platformGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .platformCard {
+    min-width: unset;
+    padding: 10px 8px;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .platformGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

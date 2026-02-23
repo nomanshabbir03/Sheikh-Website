@@ -1,0 +1,147 @@
+.hero {
+  padding-top: 0;
+  padding-bottom: 100px;
+  background: var(--ink);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+@media (max-width: 1000px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+/* Badge */
+.heroBadge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--ink);
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 20px;
+  font-family: var(--mono);
+  margin-bottom: 20px;
+}
+
+/* Heading */
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.2;
+}
+
+.hero em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+/* Tagline */
+.heroTagline {
+  margin-top: 20px;
+  font-family: var(--mono);
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+.heroDiscipline {
+  margin-top: 8px;
+  color: var(--mid);
+}
+
+.heroSub {
+  margin-top: 20px;
+  color: var(--mid);
+  max-width: 600px;
+}
+
+.heroHandle {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.heroHandle span {
+  color: var(--gold);
+  font-family: var(--mono);
+}
+
+/* Buttons */
+.heroActions {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1000px) {
+  .heroActions {
+    justify-content: center;
+  }
+}
+
+/* Stats */
+.heroStats {
+  display: flex;
+  gap: 40px;
+  margin-top: 50px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1000px) {
+  .heroStats {
+    justify-content: center;
+  }
+}
+
+.statNum {
+  display: block;
+  font-size: 22px;
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--mid);
+}
+
+/* Image Column */
+.heroImageCol {
+  display: flex;
+  justify-content: center;
+}
+
+.heroPhotoFrame {
+  position: relative;
+  max-width: 400px;
+}
+
+.heroPhotoFrame img {
+  width: 100%;
+  border-radius: 16px;
+  display: block;
+}
+
+/* Floating Tag */
+.heroTagFloat {
+  position: absolute;
+  bottom: 20px;
+  left: -20px;
+  background: var(--gold);
+  color: var(--ink);
+  padding: 15px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.heroTagFloat strong {
+  display: block;
+  font-size: 18px;
+}

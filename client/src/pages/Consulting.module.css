@@ -1,0 +1,389 @@
+/* Consulting.module.css
+   Styles for the Consulting & Coaching page
+   Includes who-cards, packages, process steps, urgency bar */
+
+/* ══════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════ */
+.pageHeader {
+  background: var(--charcoal);
+  padding: 70px 6% 50px; 
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(201,162,39,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,162,39,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.pageHeaderInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.pageHeaderGlow {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,162,39,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.headerSub {
+  color: rgba(255,255,255,0.55);
+  font-size: 16px;
+  max-width: 580px;
+  margin-top: 8px;
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════════
+   WHO IS THIS FOR
+══════════════════════════════════ */
+.whoSection {
+  background: var(--navy);
+  padding: 70px 0;
+}
+
+.whoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 40px;
+}
+
+.whoCard {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 2px solid var(--gold);
+  padding: 24px 18px;
+  border-radius: 4px;
+  text-align: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.whoCard:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-3px);
+}
+
+.whoIcon {
+  font-size: 30px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.whoCard h4 {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.whoCard p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════════
+   PACKAGES
+══════════════════════════════════ */
+.packagesSection {
+  background: var(--charcoal);
+  padding: 80px 0;
+  margin-top: 40px;
+}
+
+.packagesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.packageCard {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 36px 28px;
+  position: relative;
+  transition: transform 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.packageCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(201,162,39,0.4);
+}
+
+.packageFeatured {
+  border-color: var(--gold);
+  background: rgba(201,162,39,0.06);
+}
+
+.pkgBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.pkgNum {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.packageCard h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.pkgDuration {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+  font-family: var(--mono);
+  display: block;
+}
+
+.pkgFeatures {
+  list-style: none;
+  margin-bottom: 28px;
+  flex: 1;
+}
+
+.pkgFeatures li {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+
+.pkgFeatures li:last-child {
+  border-bottom: none;
+}
+
+.pkgCheck {
+  color: var(--gold);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ══════════════════════════════════
+   PROCESS STEPS
+══════════════════════════════════ */
+.processSection {
+  background: var(--mist);
+  padding: 80px 0;
+}
+
+.processRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 48px;
+  position: relative;
+}
+
+.processRow::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  left: calc(16.6% + 16px);
+  right: calc(16.6% + 16px);
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), rgba(201,162,39,0.2), var(--gold));
+}
+
+.processStep {
+  text-align: center;
+  padding: 0 20px;
+}
+
+.stepNum {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--gold);
+  position: relative;
+  z-index: 1;
+}
+
+.processStep h4 {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+}
+
+.processStep p {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.7;
+  max-width: 240px;
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════════
+   TESTIMONIAL STRIP
+══════════════════════════════════ */
+.testimonialsSection {
+  background: var(--navy);
+  padding: 70px 0;
+}
+
+.tGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.tCard {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 26px;
+  transition: transform 0.2s;
+}
+
+.tCard:hover { transform: translateY(-3px); }
+
+.tStars {
+  color: var(--gold);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.tQuote {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.tAuthor {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.tRole {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 2px;
+}
+
+/* ══════════════════════════════════
+   URGENCY BAR
+══════════════════════════════════ */
+.urgencyBar {
+  background: var(--gold);
+  padding: 44px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.urgencyText h3 {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3vw, 28px);
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+.urgencyText p {
+  color: rgba(13,13,13,0.7);
+  font-size: 15px;
+  max-width: 500px;
+}
+
+.btnDark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 36px;
+  background: var(--charcoal);
+  color: var(--white);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s, background 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btnDark:hover {
+  background: var(--navy);
+  transform: scale(1.03);
+}
+
+/* ══════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .whoGrid      { grid-template-columns: repeat(2, 1fr); }
+  .packagesGrid { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; }
+  .tGrid        { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .pageHeader   { padding: 60px 5% 40px; }
+  .whoGrid      { grid-template-columns: 1fr 1fr; }
+  .processRow   { grid-template-columns: 1fr; gap: 36px; }
+  .processRow::before { display: none; }
+  .tGrid        { grid-template-columns: 1fr; }
+  .urgencyBar   { flex-direction: column; text-align: center; }
+  .urgencyText p { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .whoGrid { grid-template-columns: 1fr; }
+}

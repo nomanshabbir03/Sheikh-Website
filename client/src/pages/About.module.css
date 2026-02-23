@@ -1,0 +1,415 @@
+/* About.module.css
+   Styles for the About page — biography, story blocks, philosophy */
+
+/* ══════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════ */
+.pageHeader {
+  background: var(--charcoal);
+  padding: 70px 6% 50px; 
+  position: relative;
+  overflow: hidden;
+  background-image:
+    linear-gradient(rgba(201,162,39,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,162,39,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.pageHeaderInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.pageHeaderGlow {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,162,39,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════
+   MAIN ABOUT GRID
+══════════════════════════════════ */
+.aboutSection {
+  padding: 90px 0;
+  background: var(--mist);
+}
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.imageCol {
+  position: relative;
+}
+
+.photoPlaceholder {
+  width: 100%;
+  height: 520px;
+  background: linear-gradient(135deg, var(--navy), var(--steel));
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  position: relative;
+}
+
+.photoFrame {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  right: 12px;
+  bottom: -12px;
+  border: 1.5px solid rgba(201,162,39,0.4);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.accentBox {
+  position: absolute;
+  bottom: -22px;
+  right: -22px;
+  background: var(--charcoal);
+  border: 1px solid rgba(201,162,39,0.3);
+  padding: 18px 22px;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.accentBoxLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.accentBoxValue {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--white);
+  font-weight: 700;
+}
+
+.textCol {
+  padding-top: 8px;
+}
+
+.bio {
+  color: #444;
+  font-size: 16px;
+  margin-bottom: 18px;
+  line-height: 1.85;
+}
+
+.bio strong { color: var(--charcoal); font-weight: 700; }
+.bio em     { color: var(--gold); font-style: italic; }
+
+/* Story Blocks */
+.storyBlocks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.storyBlock {
+  background: var(--cream);
+  padding: 18px;
+  border-radius: 4px;
+  border-left: 3px solid var(--gold);
+}
+
+.storyBlock h4 {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--charcoal);
+  margin-bottom: 5px;
+}
+
+.storyBlock p {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.6;
+}
+
+/* Authority Markers */
+.markerList {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.marker {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--charcoal);
+  line-height: 1.5;
+}
+
+.markerDot {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+/* Philosophy */
+.philosophyBlock {
+  margin-top: 36px;
+  background: var(--charcoal);
+  border-radius: 4px;
+  padding: 28px 30px;
+  border-left: 4px solid var(--gold);
+}
+
+.philosophyQuote {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.philosophyAuthor {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.ctaRow {
+  margin-top: 32px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ══════════════════════════════════
+   STATS STRIP
+══════════════════════════════════ */
+.statsStrip {
+  background: var(--navy);
+  padding: 56px 6%;
+}
+
+.statsGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+
+.statBox {
+  padding: 24px;
+  border: 1px solid rgba(201,162,39,0.15);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+}
+
+.statNum {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--gold);
+  display: block;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ══════════════════════════════════
+   EXPERTISE SECTION
+══════════════════════════════════ */
+.expertiseSection {
+  background: var(--cream);
+  padding: 90px 0;
+}
+
+.expertiseGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.expertiseCard {
+  background: var(--white);
+  border-radius: 4px;
+  padding: 32px 26px;
+  border-bottom: 3px solid var(--gold);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.expertiseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.1);
+}
+
+.expertiseIcon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.expertiseCard h3 {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--charcoal);
+  margin-bottom: 10px;
+}
+
+.expertiseCard p {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════════
+   CTA BANNER
+══════════════════════════════════ */
+.ctaBanner {
+  background: var(--gold);
+  padding: 56px 6%;
+  text-align: center;
+}
+
+.ctaBanner h2 {
+  font-family: var(--serif);
+  font-size: clamp(24px, 4vw, 40px);
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.ctaBanner p {
+  color: rgba(13,13,13,0.7);
+  font-size: 16px;
+  margin-bottom: 28px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctaBannerButtons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btnDarkSolid {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--charcoal);
+  color: var(--white);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btnDarkSolid:hover {
+  background: var(--navy);
+  transform: translateY(-2px);
+}
+
+.btnOutlineInk {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 30px;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btnOutlineInk:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+
+/* ══════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .aboutGrid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .imageCol {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .accentBox { right: 0; }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .expertiseGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageHeader   { padding: 60px 5% 40px; }
+  .aboutSection { padding: 60px 0; }
+
+  .storyBlocks  { grid-template-columns: 1fr; }
+
+  .statsGrid    { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+  .expertiseGrid { grid-template-columns: 1fr; }
+
+  .ctaRow            { flex-direction: column; }
+  .ctaBannerButtons  { flex-direction: column; align-items: center; }
+
+  .philosophyQuote { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  .photoPlaceholder { height: 320px; }
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+}
