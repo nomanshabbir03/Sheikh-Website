@@ -1,5 +1,6 @@
 import styles from "./HeroSection.module.css";
 import { Link } from "react-router-dom";
+import tutor1 from '../assets/tutor1.jpg';
 
 export default function HeroSection() {
   return (
@@ -76,7 +77,7 @@ export default function HeroSection() {
         <div className={styles.heroImageCol}>
           <div className={styles.heroPhotoFrame}>
             <img
-              src="/assets/tutor1.jpg"
+              src={tutor1}
               alt="Sheikh Ishtiaq — The Growth Strategist"
             />
 
