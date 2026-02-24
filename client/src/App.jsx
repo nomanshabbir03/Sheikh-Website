@@ -1,7 +1,7 @@
 // App.jsx
 // Main app entry — defines all routes and wraps them in Layout
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Layout from './components/layout/Layout'
 import Home       from './pages/Home'
@@ -16,7 +16,7 @@ import './styles/globals.css'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <>
       <Toaster
         position="top-right"
         toastOptions={{
@@ -44,6 +44,6 @@ export default function App() {
           <Route path="/contact"    element={<Contact />} />
         </Routes>
       </Layout>
-    </BrowserRouter>
+    </>
   )
 }
