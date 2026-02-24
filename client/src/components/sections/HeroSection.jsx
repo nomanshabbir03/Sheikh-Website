@@ -1,6 +1,6 @@
 import styles from "./HeroSection.module.css";
 import { Link } from "react-router-dom";
-import tutor1 from '../assets/tutor1.jpg';
+import tutor1 from "../../../assets/tutor1.jpg";
 
 export default function HeroSection() {
   return (
