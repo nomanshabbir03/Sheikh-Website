@@ -76,7 +76,7 @@ export default function HeroSection() {
         <div className={styles.heroImageCol}>
           <div className={styles.heroPhotoFrame}>
             <img
-              src="https://via.placeholder.com/400x520/1A1A2E/C9A227?text=Sheikh+Ishtiaq"
+              src="/assets/tutor1.jpg"
               alt="Sheikh Ishtiaq — The Growth Strategist"
             />
 
