@@ -129,18 +129,6 @@ export default function Visa() {
             {/* ── Main Column ── */}
             <div>
 
-              {/* Disclaimer */}
-              <div className={styles.disclaimer}>
-                <span className={styles.disclaimerIcon}>⚠️</span>
-                <p className={styles.disclaimerText}>
-                  <strong>Important Disclaimer:</strong> All services provided are
-                  guidance and preparation only. Sheikh Ishtiaq is not a licensed
-                  immigration attorney. No outcome or approval can be guaranteed.
-                  Final decisions rest entirely with the US Embassy / Consulate.
-                  This is independent advisory — not legal representation.
-                </p>
-              </div>
-
               {/* Who this helps */}
               <h3 className={styles.subHeading}>Who This Helps</h3>
               <ul className={styles.whoList}>

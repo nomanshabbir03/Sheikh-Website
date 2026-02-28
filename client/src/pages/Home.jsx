@@ -8,18 +8,53 @@ import toast from 'react-hot-toast'
 import { supabase } from '../lib/supabase'
 import styles from './Home.module.css'
 import HeroSection from "../components/sections/HeroSection"
+import VisaConsultancySection from "../components/sections/VisaConsultancySection"
+import AnimatedCounter from "../components/AnimatedCounter"
+import { FaFacebook, FaInstagram, FaWhatsapp, FaTiktok, FaYoutube, FaLinkedin, FaSnapchat, FaTwitter, FaGlobe } from 'react-icons/fa'
+
+// ── YouTube thumbnail helper ──────────────────────────────────────
+function getYouTubeThumbnail(url) {
+  if (!url) return null
+  try {
+    // Handle these URL formats:
+    // https://www.youtube.com/watch?v=VIDEO_ID
+    // https://youtu.be/VIDEO_ID
+    // https://www.youtube.com/embed/VIDEO_ID
+    // https://youtube.com/shorts/VIDEO_ID
+    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/
+    const match = url.match(regExp)
+    const videoId = match ? match[1] : null
+    if (!videoId) return null
+    // Use hqdefault as it is more reliable across all videos
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` 
+  } catch {
+    return null
+  }
+}
+
+// ── YouTube video ID extractor ───────────────────────────────────
+function getYouTubeVideoId(url) {
+  if (!url) return null
+  try {
+    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/
+    const match = url.match(regExp)
+    return match ? match[1] : null
+  } catch {
+    return null
+  }
+}
 
 // ── Platform data ──────────────────────────────────────
 const platforms = [
-  { icon: '📘', name: 'Facebook',    count: '@imsheikhishtiaq' },
-  { icon: '📸', name: 'Instagram',   count: '@imsheikhishtiaq' },
-  { icon: '💬', name: 'WhatsApp',    count: '2K+ Members' },
-  { icon: '🎵', name: 'TikTok',      count: '@imsheikhishtiaq' },
-  { icon: '▶️', name: 'YouTube',     count: '18K+ Subs' },
-  { icon: '💼', name: 'LinkedIn',    count: '4K+ Connections' },
-  { icon: '👻', name: 'Snapchat',    count: '@imsheikhishtiaq' },
-  { icon: '🐦', name: 'X (Twitter)', count: '6K+ Followers' },
-  { icon: '🌐', name: 'Website',     count: 'imsheikhishtiaq.com' },
+  { icon: <FaFacebook />, name: 'Facebook',    count: '@imsheikhishtiaq' },
+  { icon: <FaInstagram />, name: 'Instagram',   count: '@imsheikhishtiaq' },
+  { icon: <FaWhatsapp />, name: 'WhatsApp',    count: '2K+ Members' },
+  { icon: <FaTiktok />, name: 'TikTok',      count: '@imsheikhishtiaq' },
+  { icon: <FaYoutube />, name: 'YouTube',     count: '18K+ Subs' },
+  { icon: <FaLinkedin />, name: 'LinkedIn',    count: '4K+ Connections' },
+  { icon: <FaSnapchat />, name: 'Snapchat',    count: '@imsheikhishtiaq' },
+  { icon: <FaTwitter />, name: 'X (Twitter)', count: '6K+ Followers' },
+  { icon: <FaGlobe />, name: 'Website',     count: 'imsheikhishtiaq.com' },
 ]
 
 // ── Static fallback testimonials ──
@@ -52,9 +87,33 @@ const fallbackTestimonials = [
 
 // ── Static fallback videos ──
 const fallbackVideos = [
-  { id: 1, title: 'Why the Middle East Shift Matters for Pakistan Economy', category: 'Geopolitics',       views: '48K', is_featured: true },
-  { id: 2, title: 'How to Read Global Markets Before They Move',            category: 'Business Strategy', views: '22K', is_featured: false },
-  { id: 3, title: 'The 3 Mental Models Every Leader Needs Right Now',       category: 'Self-Growth',       views: '15K', is_featured: false },
+  { 
+    id: 1, 
+    title: 'Why the Middle East Shift Matters for Pakistan Economy', 
+    category: 'Geopolitics', 
+    views: '48K', 
+    duration: '18:42',
+    is_featured: true,
+    youtube_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  },
+  { 
+    id: 2, 
+    title: 'How to Read Global Markets Before They Move', 
+    category: 'Business Strategy', 
+    views: '22K',
+    duration: '12:15',
+    is_featured: false,
+    youtube_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  },
+  { 
+    id: 3, 
+    title: 'The 3 Mental Models Every Leader Needs Right Now', 
+    category: 'Self-Growth', 
+    views: '15K',
+    duration: '8:30',
+    is_featured: false,
+    youtube_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  },
 ]
 
 // ── Services data ──
@@ -107,6 +166,7 @@ export default function Home() {
   const [testimonialsLoading, setTestimonialsLoading] = useState(true)
   const [email, setEmail] = useState('')
   const [subscribing, setSubscribing] = useState(false)
+  const [activeVideo, setActiveVideo] = useState(null)
 
   // ── Fetch videos ──────────────────────────────────────
   useEffect(() => {
@@ -118,6 +178,12 @@ export default function Home() {
           .eq('is_published', true)
           .order('created_at', { ascending: false })
           .limit(3)
+        
+        console.log('=== VIDEO DEBUG ===')
+        console.log('data:', data)
+        console.log('error:', error)
+        console.log('count:', data?.length)
+        
         if (error) throw error
         setVideos(data?.length ? data : fallbackVideos)
       } catch {
@@ -128,6 +194,24 @@ export default function Home() {
     }
     fetchVideos()
   }, [])
+
+  // ── Modal escape key ───────────────────────────────────
+  useEffect(() => {
+    if (activeVideo) {
+      // Escape key listener
+      const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+          setActiveVideo(null)
+        }
+      }
+      document.addEventListener('keydown', handleEscape)
+      
+      // Cleanup
+      return () => {
+        document.removeEventListener('keydown', handleEscape)
+      }
+    }
+  }, [activeVideo])
 
   // ── Fetch testimonials ────────────────────────────────
   useEffect(() => {
@@ -180,6 +264,9 @@ export default function Home() {
       {/* ─── HERO SECTION ─── */}
       <HeroSection />
 
+      {/* ─── VISA CONSULTANCY SECTION ─── */}
+      <VisaConsultancySection />
+
       {/* ─── PLATFORM STRIP ─── */}
       <div className={styles.platformStrip}>
         {platforms.map((p, i) => (
@@ -209,26 +296,58 @@ export default function Home() {
             <div className="loader">Loading videos...</div>
           ) : (
             <div className={styles.videoGrid}>
-              {videos.map((v, i) => (
-                <div key={v.id} className={styles.videoCard}>
-                  <div className={styles.videoThumb}>
-                    {(v.is_featured || i === 0) && (
-                      <span className={styles.videoFeaturedBadge}>🔥 Featured</span>
-                    )}
-                    <div className={styles.playBtn}>▶</div>
+              {videos.map((v, i) => {
+                const thumbnail = getYouTubeThumbnail(v.youtube_url)
+                return (
+                  <div 
+                    key={v.id} 
+                    className={styles.videoCard}
+                    onClick={() => setActiveVideo(v)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div 
+                      className={styles.videoThumb}
+                      style={{
+                        backgroundImage: thumbnail ? `url(${thumbnail})` : undefined,
+                        backgroundSize: thumbnail ? 'cover' : undefined,
+                        backgroundPosition: thumbnail ? 'center' : undefined,
+                      }}
+                    >
+                      {(v.is_featured || i === 0) && (
+                        <span className={styles.videoFeaturedBadge}>🔥 Featured</span>
+                      )}
+                      <div 
+                        className={styles.playBtn}
+                        style={{
+                          background: 'rgba(0,0,0,0.6)',
+                          border: '2px solid rgba(255,255,255,0.8)',
+                          color: 'white',
+                        }}
+                      >▶</div>
+                    </div>
+                    <div className={styles.videoInfo}>
+                      <p className={styles.videoCategory}>{v.category}</p>
+                      <p className={styles.videoTitle}>{v.title}</p>
+                      <p className={styles.videoMeta}>
+                        {v.views && `${v.views} views`}
+                        {v.duration && ` · ${v.duration}`}
+                      </p>
+                    </div>
                   </div>
-                  <div className={styles.videoInfo}>
-                    <p className={styles.videoCategory}>{v.category}</p>
-                    <p className={styles.videoTitle}>{v.title}</p>
-                    <p className={styles.videoMeta}>
-                      {v.views && `${v.views} views`}
-                      {v.duration && ` · ${v.duration}`}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
+          
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <Link 
+              to="/media" 
+              className="btn-ghost"
+              style={{ marginTop: '40px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              View All Media & Appearances →
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -293,7 +412,9 @@ export default function Home() {
           <div className={styles.impactRow}>
             {impactStats.map((s) => (
               <div key={s.label} className={styles.impactBox}>
-                <span className={styles.impactNum}>{s.num}</span>
+                <span className={styles.impactNum}>
+                  <AnimatedCounter target={s.num} duration={2000} />
+                </span>
                 <span className={styles.impactLabel}>{s.label}</span>
               </div>
             ))}
@@ -325,6 +446,150 @@ export default function Home() {
           </button>
         </form>
       </div>
+
+      {/* ─── VIDEO MODAL ─── */}
+      {activeVideo && (
+        <div
+          onClick={() => setActiveVideo(null)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 2000,
+            background: 'rgba(0, 0, 0, 0.0)',
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'flex-end',
+            padding: '24px',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              pointerEvents: 'all',
+              width: '560px',
+              maxWidth: 'calc(100vw - 48px)',
+              background: '#0D0D0D',
+              border: '1px solid rgba(201,162,39,0.3)',
+              borderRadius: '4px',
+              overflow: 'hidden',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.8)',
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                background: '#1A1A2E',
+                padding: '14px 20px',
+                borderBottom: '1px solid rgba(255,255,255,0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    fontSize: '11px',
+                    color: '#C9A227',
+                    fontFamily: 'monospace',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    marginBottom: '4px',
+                  }}
+                >
+                  {activeVideo.category}
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '18px',
+                    color: '#fff',
+                    fontWeight: '400',
+                  }}
+                >
+                  {activeVideo.title}
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveVideo(null)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(255,255,255,0.6)',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '2px',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#C9A227'
+                  e.target.style.background = 'rgba(201,162,39,0.1)'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = 'rgba(255,255,255,0.6)'
+                  e.target.style.background = 'none'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Video Container */}
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: 0,
+                paddingBottom: '56.25%', // 16:9 aspect ratio
+                background: '#000',
+              }}
+            >
+              {(() => {
+                const videoId = getYouTubeVideoId(activeVideo.youtube_url)
+                if (!videoId) return null
+                
+                return (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                    }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={activeVideo.title}
+                  />
+                )
+              })()}
+            </div>
+
+            {/* Footer hint */}
+            <div
+              style={{
+                padding: '12px 20px',
+                background: '#1A1A2E',
+                textAlign: 'center',
+                fontSize: '12px',
+                color: 'rgba(255,255,255,0.4)',
+                fontFamily: 'monospace',
+                letterSpacing: '0.5px',
+              }}
+            >
+              Press ESC or click outside to close
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

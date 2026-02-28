@@ -3,6 +3,8 @@ import styles from "./Contact.module.css";
 import { useForm } from "react-hook-form";
 import { supabase } from "../lib/supabase";
 import toast from "react-hot-toast";
+import { FaWhatsapp } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 export default function Contact() {
   const {
@@ -19,11 +21,10 @@ export default function Contact() {
 
     const { error } = await supabase.from("bookings").insert([
       {
-        full_name: data.full_name,
+        full_name: `${data.first_name} ${data.last_name}`,
         email: data.email,
+        phone: data.phone,
         service_type: data.service_type,
-        package: data.package,
-        preferred_date: data.preferred_date,
         message: data.message,
       },
     ]);
@@ -53,9 +54,28 @@ export default function Contact() {
         </p>
       </div>
 
-      {/* Calendar Placeholder */}
-      <div className={styles.calendarBox}>
-        <p>Calendar Embed Placeholder</p>
+      {/* Consultation Contact Section */}
+      <div className={styles.consultationCard}>
+        <h2 className={styles.consultationHeading}>Need Expert's Guidance?</h2>
+        <p className={styles.consultationSubtext}>Our consultants are ready to assist you every step of the way</p>
+        
+        <div className={styles.iconButtons}>
+          <a 
+            href="https://wa.me/923365116800" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={`${styles.iconButton} ${styles.whatsapp}`}
+          >
+            <FaWhatsapp size={48} />
+          </a>
+          
+          <a 
+            href="mailto:contact@sheikhvisaconsultancy.com" 
+            className={`${styles.iconButton} ${styles.email}`}
+          >
+            <MdEmail size={48} />
+          </a>
+        </div>
       </div>
 
       {/* Content Layout */}
@@ -65,61 +85,75 @@ export default function Contact() {
           onSubmit={handleSubmit(onSubmit)}
           className={styles.form}
         >
-          <input
-            type="text"
-            placeholder="Full Name"
-            {...register("full_name", { required: true })}
-          />
-          {errors.full_name && (
+          {/* First Group: First Name | Last Name */}
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldPair}>
+              <input
+                type="text"
+                placeholder="First Name"
+                {...register("first_name", { required: true })}
+                className={styles.noBorder}
+              />
+              <div className={styles.divider}></div>
+              <input
+                type="text"
+                placeholder="Last Name"
+                {...register("last_name", { required: true })}
+                className={styles.noBorder}
+              />
+            </div>
+          </div>
+          {(errors.first_name || errors.last_name) && (
             <span className={styles.error}>Name is required</span>
           )}
 
-          <input
-            type="email"
-            placeholder="Email Address"
-            {...register("email", { required: true })}
-          />
-          {errors.email && (
-            <span className={styles.error}>Email is required</span>
+          {/* Second Group: Email | Phone */}
+          <div className={styles.fieldGroup}>
+            <div className={styles.fieldPair}>
+              <input
+                type="email"
+                placeholder="Email Address"
+                {...register("email", { required: true })}
+                className={styles.noBorder}
+              />
+              <div className={styles.divider}></div>
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                {...register("phone", { required: true })}
+                className={styles.noBorder}
+              />
+            </div>
+          </div>
+          {(errors.email || errors.phone) && (
+            <span className={styles.error}>Email and Phone are required</span>
           )}
 
-          <select
-            {...register("service_type", { required: true })}
-          >
-            <option value="">Select Service</option>
-            <option value="Consulting">Consulting</option>
-            <option value="Visa">Visa Consultancy</option>
-            <option value="TGD">TGD Courses</option>
-          </select>
+          {/* Third Group: Subject */}
+          <div className={styles.fieldGroup}>
+            <select
+              {...register("service_type", { required: true })}
+              className={styles.noBorder}
+            >
+              <option value="">Select Service</option>
+              <option value="Consulting">Consulting</option>
+              <option value="Visa">Visa Consultancy</option>
+              <option value="TGD">TGD Courses</option>
+            </select>
+          </div>
           {errors.service_type && (
             <span className={styles.error}>Select a service</span>
           )}
 
-          <select
-            {...register("package", { required: true })}
-          >
-            <option value="">Select Package</option>
-            <option value="Starter">Starter</option>
-            <option value="Professional">Professional</option>
-            <option value="Executive">Executive</option>
-          </select>
-          {errors.package && (
-            <span className={styles.error}>Select a package</span>
-          )}
-
-          <input
-            type="date"
-            {...register("preferred_date", { required: true })}
-          />
-          {errors.preferred_date && (
-            <span className={styles.error}>Select preferred date</span>
-          )}
-
-          <textarea
-            rows="4"
-            placeholder="Tell us about your goals..."
-            {...register("message")}
-          />
+          {/* Fourth Group: Message */}
+          <div className={styles.fieldGroup}>
+            <textarea
+              rows="4"
+              placeholder="Tell us about your goals..."
+              {...register("message")}
+              className={styles.noBorder}
+            />
+          </div>
 
           <button
             type="submit"

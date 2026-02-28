@@ -2,13 +2,39 @@
 // Fixed navigation bar component with responsive hamburger menu
 // Changed from named export to default export to fix the import error
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styles from './Navbar.module.css'
+import ConsultationPopup from '../ConsultationPopup'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
+  const [isConsultationPopupOpen, setIsConsultationPopupOpen] = useState(false)
   const location = useLocation()
+  const lastScrollY = useRef(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      
+      // Hide navbar when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setIsHidden(true)
+      } else {
+        setIsHidden(false)
+      }
+      
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const navLinks = [
     { path: '/',           label: 'Home' },
@@ -23,11 +49,12 @@ export default function Navbar() {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu  = () => setIsMenuOpen(false)
+  const toggleConsultationPopup = () => setIsConsultationPopupOpen(!isConsultationPopupOpen)
 
   return (
     <>
       {/* ── MAIN NAVBAR ── */}
-      <nav className={styles.navbar}>
+      <nav className={`${styles.navbar} ${isHidden ? styles.hidden : ''}`}>
         <div className={styles.navbarContent}>
 
           {/* Logo */}
@@ -55,9 +82,9 @@ export default function Navbar() {
           </ul>
 
           {/* Desktop CTA */}
-          <Link to="/contact" className={styles.ctaButton}>
+          <button className={styles.ctaButton} onClick={toggleConsultationPopup}>
             Book Consultation
-          </Link>
+          </button>
 
           {/* Hamburger — mobile only */}
           <button
@@ -90,13 +117,15 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <Link
-              to="/contact"
+            <button
               className={styles.mobileCta}
-              onClick={closeMenu}
+              onClick={() => {
+                toggleConsultationPopup()
+                closeMenu()
+              }}
             >
               Book Consultation →
-            </Link>
+            </button>
           </li>
         </ul>
       </div>
@@ -105,6 +134,12 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className={styles.overlay} onClick={closeMenu} />
       )}
+      
+      {/* Consultation Popup */}
+      <ConsultationPopup 
+        isOpen={isConsultationPopupOpen} 
+        onClose={() => setIsConsultationPopupOpen(false)} 
+      />
     </>
   )
 }

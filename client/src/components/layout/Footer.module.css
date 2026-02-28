@@ -48,6 +48,10 @@
 
 .platformIcon {
   font-size: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .platformName {
@@ -60,7 +64,7 @@
 
 .platformHandle {
   font-size: 11px;
-  color: var(--gold);
+  color: var(--mid);
   font-weight: 600;
 }
 
@@ -92,14 +96,14 @@
 }
 
 .footerLogo span {
-  color: var(--gold);
+  color: var(--gold-lt);
 }
 
 .footerHandle {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 1px;
-  color: var(--gold);
+  color: var(--mid);
   margin-bottom: 12px;
   display: block;
 }
@@ -116,7 +120,7 @@
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--mid);
   margin-bottom: 16px;
 }
 
@@ -136,7 +140,7 @@
 }
 
 .footerCol ul li a:hover {
-  color: var(--gold);
+  color: var(--gold-lt);
 }
 
 /* Footer bottom */
@@ -150,12 +154,12 @@
 }
 
 .footerBottom a {
-  color: var(--gold);
+  color: var(--mid);
   text-decoration: none;
 }
 
 .footerBottomHandle {
-  color: var(--gold);
+  color: var(--mid);
   font-weight: 600;
 }
 

@@ -1,8 +1,12 @@
 import styles from "./HeroSection.module.css";
 import { Link } from "react-router-dom";
+import { useState } from 'react';
 import tutor1 from "../../../assets/tutor1.jpg";
+import ConsultationPopup from "../ConsultationPopup";
 
 export default function HeroSection() {
+  const [isConsultationPopupOpen, setIsConsultationPopupOpen] = useState(false)
+  
   return (
     <section className={styles.hero} id="home">
       <div className={`${styles.heroInner} container`}>
@@ -39,9 +43,9 @@ export default function HeroSection() {
 
           {/* ACTION BUTTONS */}
           <div className={styles.heroActions}>
-            <Link to="/contact" className="btn-gold">
+            <button className="btn-gold" onClick={() => setIsConsultationPopupOpen(true)}>
               Book Consultation →
-            </Link>
+            </button>
 
             <Link to="/insights" className="btn-ghost">
               ▶ Watch Latest Analysis
@@ -91,6 +95,12 @@ export default function HeroSection() {
         </div>
 
       </div>
+      
+      {/* Consultation Popup */}
+      <ConsultationPopup 
+        isOpen={isConsultationPopupOpen} 
+        onClose={() => setIsConsultationPopupOpen(false)} 
+      />
     </section>
   );
 }

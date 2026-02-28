@@ -1,5 +1,5 @@
-// admin/src/pages/Media.jsx
-// Manage media gallery items with full CRUD functionality
+// admin/src/pages/Videos.jsx
+// Manage YouTube videos with full CRUD functionality
 
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
@@ -22,6 +22,7 @@ const inputStyle = {
   outline: 'none',
   boxSizing: 'border-box',
 }
+const focusStyle = { borderColor: '#C9A227' }
 const labelStyle = {
   display: 'block',
   fontSize: '11px',
@@ -32,68 +33,60 @@ const labelStyle = {
   marginBottom: '6px',
 }
 
-const MEDIA_TYPES = ['Podcast', 'Speech', 'Event', 'Interview', 'Webinar', 'Press', 'Photo']
+const CATEGORIES = ['Geopolitics', 'Business Strategy', 'Self-Growth', 'Vlogs', 'Shorts', 'Podcast', 'Event', 'Speech', 'Interview', 'Webinar', 'Press']
 
-const TYPE_COLORS = {
-  Podcast: '#8B5CF6', Speech: '#F59E0B', Event: '#10B981',
-  Interview: '#3B82F6', Webinar: '#EC4899', Press: '#EF4444', Photo: '#14B8A6',
-}
-
-export default function Media() {
-  const [items, setItems] = useState([])
+export default function Videos() {
+  const [videos, setVideos] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [editingItem, setEditingItem] = useState(null)
+  const [editingVideo, setEditingVideo] = useState(null)
   const [formData, setFormData] = useState({
     title: '',
-    media_type: MEDIA_TYPES[0],
-    event_name: '',
-    event_date: '',
-    description: '',
-    media_url: '',
-    image_url: '',
+    youtube_url: '',
+    category: CATEGORIES[0],
+    duration: '',
+    views: '',
     is_published: false,
+    is_featured: false,
   })
 
-  useEffect(() => { fetchItems() }, [])
+  useEffect(() => { fetchVideos() }, [])
 
-  async function fetchItems() {
+  async function fetchVideos() {
     setLoading(true)
     const { data, error } = await supabase
-      .from('media_gallery')
+      .from('videos')
       .select('*')
       .order('created_at', { ascending: false })
-    if (error) toast.error('Failed to load media')
-    else setItems(data || [])
+    if (error) toast.error('Failed to load videos')
+    else setVideos(data || [])
     setLoading(false)
   }
 
   function openAddModal() {
-    setEditingItem(null)
+    setEditingVideo(null)
     setFormData({
       title: '',
-      media_type: MEDIA_TYPES[0],
-      event_name: '',
-      event_date: '',
-      description: '',
-      media_url: '',
-      image_url: '',
+      youtube_url: '',
+      category: CATEGORIES[0],
+      duration: '',
+      views: '',
       is_published: false,
+      is_featured: false,
     })
     setShowModal(true)
   }
 
-  function openEditModal(item) {
-    setEditingItem(item)
+  function openEditModal(video) {
+    setEditingVideo(video)
     setFormData({
-      title: item.title || '',
-      media_type: item.media_type || MEDIA_TYPES[0],
-      event_name: item.event_name || '',
-      event_date: item.event_date || '',
-      description: item.description || '',
-      media_url: item.media_url || '',
-      image_url: item.image_url || '',
-      is_published: item.is_published || false,
+      title: video.title || '',
+      youtube_url: video.youtube_url || '',
+      category: video.category || CATEGORIES[0],
+      duration: video.duration || '',
+      views: video.views || '',
+      is_published: video.is_published || false,
+      is_featured: video.is_featured || false,
     })
     setShowModal(true)
   }
@@ -104,30 +97,27 @@ export default function Media() {
     const submitData = {
       ...formData,
       title: formData.title.trim(),
-      event_name: formData.event_name.trim(),
-      description: formData.description.trim(),
-      media_url: formData.media_url.trim(),
-      image_url: formData.image_url.trim(),
+      youtube_url: formData.youtube_url.trim(),
     }
 
-    if (!submitData.title) {
-      toast.error('Title is required')
+    if (!submitData.title || !submitData.youtube_url) {
+      toast.error('Title and YouTube URL are required')
       return
     }
 
     let result
-    if (editingItem) {
-      result = await supabase.from('media_gallery').update(submitData).eq('id', editingItem.id)
+    if (editingVideo) {
+      result = await supabase.from('videos').update(submitData).eq('id', editingVideo.id)
     } else {
-      result = await supabase.from('media_gallery').insert(submitData)
+      result = await supabase.from('videos').insert(submitData)
     }
 
     if (result.error) {
       toast.error(result.error.message)
     } else {
-      toast.success(editingItem ? 'Media item updated successfully' : 'Media item added successfully')
+      toast.success(editingVideo ? 'Video updated successfully' : 'Video added successfully')
       setShowModal(false)
-      fetchItems()
+      fetchVideos()
     }
   }
 
@@ -136,12 +126,12 @@ export default function Media() {
       return
     }
 
-    const { error } = await supabase.from('media_gallery').delete().eq('id', id)
+    const { error } = await supabase.from('videos').delete().eq('id', id)
     if (error) {
-      toast.error('Failed to delete media item')
+      toast.error('Failed to delete video')
     } else {
-      toast.success('Media item deleted successfully')
-      fetchItems()
+      toast.success('Video deleted successfully')
+      fetchVideos()
     }
   }
 
@@ -153,9 +143,9 @@ export default function Media() {
     <div>
       <div style={{ marginBottom: '28px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <p style={{ fontFamily: 'monospace', fontSize: '11px', letterSpacing: '3px', color: '#C9A227', textTransform: 'uppercase', marginBottom: '6px' }}>Appearances & Press</p>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '28px', color: '#fff' }}>Media Gallery</h1>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '4px' }}>Manage media appearances and press mentions.</p>
+          <p style={{ fontFamily: 'monospace', fontSize: '11px', letterSpacing: '3px', color: '#C9A227', textTransform: 'uppercase', marginBottom: '6px' }}>Content</p>
+          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '28px', color: '#fff' }}>Videos</h1>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '4px' }}>Manage YouTube videos and their metadata.</p>
         </div>
         <button
           onClick={openAddModal}
@@ -177,6 +167,7 @@ export default function Media() {
           + Add New
         </button>
       </div>
+
       <div style={cardStyle}>
         {loading ? (
           <p style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace', letterSpacing: '2px' }}>LOADING...</p>
@@ -186,54 +177,60 @@ export default function Media() {
               <thead>
                 <tr>
                   <th style={th}>Title</th>
-                  <th style={th}>Type</th>
-                  <th style={th}>Event Name</th>
-                  <th style={th}>Date</th>
+                  <th style={th}>Category</th>
+                  <th style={th}>Duration</th>
+                  <th style={th}>Views</th>
                   <th style={th}>Published</th>
+                  <th style={th}>Featured</th>
                   <th style={th}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map(item => (
+                {videos.map(video => (
                   <tr 
-                    key={item.id}
-                    onClick={() => openEditModal(item)}
+                    key={video.id}
+                    onClick={() => openEditModal(video)}
                     style={{ cursor: 'pointer' }}
                     onMouseEnter={e => e.target.style.background = 'rgba(255,255,255,0.02)' }
                     onMouseLeave={e => e.target.style.background = 'transparent' }
                   >
-                    <td style={{ ...td, color: '#fff', maxWidth: '240px' }}>{item.title}</td>
+                    <td style={{ ...td, color: '#fff', maxWidth: '280px' }}>{video.title}</td>
+                    <td style={{ ...td, color: '#C9A227' }}>{video.category}</td>
+                    <td style={td}>{video.duration || '—'}</td>
+                    <td style={td}>{video.views || '—'}</td>
                     <td style={td}>
                       <span style={{
                         padding: '3px 10px',
-                        background: `${TYPE_COLORS[item.media_type] || '#6B7280'}22`,
-                        color: TYPE_COLORS[item.media_type] || '#6B7280',
-                        borderRadius: '2px', fontSize: '11px', fontWeight: '700',
-                      }}>
-                        {item.media_type}
-                      </span>
-                    </td>
-                    <td style={td}>{item.event_name || '—'}</td>
-                    <td style={{ ...td, whiteSpace: 'nowrap' }}>{item.event_date ? new Date(item.event_date).toLocaleDateString() : '—'}</td>
-                    <td style={td}>
-                      <span style={{
-                        padding: '3px 10px',
-                        background: item.is_published ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.06)',
-                        border: `1px solid ${item.is_published ? 'rgba(16,185,129,0.4)' : 'rgba(255,255,255,0.12)'}`,
-                        color: item.is_published ? '#10B981' : 'rgba(255,255,255,0.4)',
+                        background: video.is_published ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.06)',
+                        border: `1px solid ${video.is_published ? 'rgba(16,185,129,0.4)' : 'rgba(255,255,255,0.12)'}`,
+                        color: video.is_published ? '#10B981' : 'rgba(255,255,255,0.4)',
                         borderRadius: '2px',
                         fontSize: '11px',
                         fontWeight: '700',
                         fontFamily: 'Arial, sans-serif',
                       }}>
-                        {item.is_published ? 'Yes' : 'No'}
+                        {video.is_published ? 'Yes' : 'No'}
+                      </span>
+                    </td>
+                    <td style={td}>
+                      <span style={{
+                        padding: '3px 10px',
+                        background: video.is_featured ? 'rgba(201,162,39,0.15)' : 'rgba(255,255,255,0.06)',
+                        border: `1px solid ${video.is_featured ? 'rgba(201,162,39,0.4)' : 'rgba(255,255,255,0.12)'}`,
+                        color: video.is_featured ? '#C9A227' : 'rgba(255,255,255,0.4)',
+                        borderRadius: '2px',
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        fontFamily: 'Arial, sans-serif',
+                      }}>
+                        {video.is_featured ? 'Yes' : 'No'}
                       </span>
                     </td>
                     <td style={td}>
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleDelete(item.id)
+                          handleDelete(video.id)
                         }}
                         style={{
                           background: 'rgba(239,68,68,0.1)',
@@ -263,7 +260,7 @@ export default function Media() {
       {/* Modal */}
       {showModal && (
         <Modal
-          title={editingItem ? 'Edit Media Item' : 'Add New Media Item'}
+          title={editingVideo ? 'Edit Video' : 'Add New Video'}
           onClose={() => setShowModal(false)}
         >
           <form onSubmit={handleSave}>
@@ -281,29 +278,45 @@ export default function Media() {
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={labelStyle}>Media Type</label>
+              <label style={labelStyle}>YouTube URL *</label>
+              <input
+                type="url"
+                value={formData.youtube_url}
+                onChange={(e) => handleInputChange('youtube_url', e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                style={inputStyle}
+                onFocus={e => e.target.style.borderColor = '#C9A227'}
+                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
+                required
+              />
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <label style={labelStyle}>Category</label>
               <select
-                value={formData.media_type}
-                onChange={(e) => handleInputChange('media_type', e.target.value)}
+                value={formData.category}
+                onChange={(e) => handleInputChange('category', e.target.value)}
                 style={{
                   ...inputStyle,
                   cursor: 'pointer',
+                  color: '#C9A227',
                 }}
                 onFocus={e => e.target.style.borderColor = '#C9A227'}
                 onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
               >
-                {MEDIA_TYPES.map(type => (
-                  <option key={type} value={type}>{type}</option>
+                {CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={labelStyle}>Event / Show Name</label>
+              <label style={labelStyle}>Duration</label>
               <input
                 type="text"
-                value={formData.event_name}
-                onChange={(e) => handleInputChange('event_name', e.target.value)}
+                value={formData.duration}
+                onChange={(e) => handleInputChange('duration', e.target.value)}
+                placeholder="18:42"
                 style={inputStyle}
                 onFocus={e => e.target.style.borderColor = '#C9A227'}
                 onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
@@ -311,41 +324,12 @@ export default function Media() {
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={labelStyle}>Date</label>
+              <label style={labelStyle}>Views</label>
               <input
-                type="date"
-                value={formData.event_date}
-                onChange={(e) => handleInputChange('event_date', e.target.value)}
-                style={inputStyle}
-                onFocus={e => e.target.style.borderColor = '#C9A227'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
-              />
-            </div>
-
-            <div style={{ marginBottom: '20px' }}>
-              <label style={labelStyle}>Description</label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                rows={3}
-                style={{
-                  ...inputStyle,
-                  resize: 'vertical',
-                  minHeight: '80px',
-                }}
-                onFocus={e => e.target.style.borderColor = '#C9A227'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
-                placeholder="Short description of the media appearance..."
-              />
-            </div>
-
-            <div style={{ marginBottom: '20px' }}>
-              <label style={labelStyle}>Media URL</label>
-              <input
-                type="url"
-                value={formData.media_url}
-                onChange={(e) => handleInputChange('media_url', e.target.value)}
-                placeholder="https://..."
+                type="text"
+                value={formData.views}
+                onChange={(e) => handleInputChange('views', e.target.value)}
+                placeholder="48K"
                 style={inputStyle}
                 onFocus={e => e.target.style.borderColor = '#C9A227'}
                 onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
@@ -357,6 +341,14 @@ export default function Media() {
                 value={formData.is_published}
                 onChange={(value) => handleInputChange('is_published', value)}
                 label="Published"
+              />
+            </div>
+
+            <div style={{ marginBottom: '32px' }}>
+              <Toggle
+                value={formData.is_featured}
+                onChange={(value) => handleInputChange('is_featured', value)}
+                label="Featured"
               />
             </div>
 

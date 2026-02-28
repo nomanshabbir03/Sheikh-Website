@@ -4,6 +4,7 @@
 
 import { Link } from 'react-router-dom'
 import styles from './About.module.css'
+import AnimatedCounter from '../components/AnimatedCounter'
 
 const storyBlocks = [
   {
@@ -188,7 +189,9 @@ export default function About() {
         <div className={styles.statsGrid}>
           {stats.map((s) => (
             <div key={s.label} className={styles.statBox}>
-              <span className={styles.statNum}>{s.num}</span>
+              <span className={styles.statNum}>
+                <AnimatedCounter target={s.num} duration={2000} />
+              </span>
               <span className={styles.statLabel}>{s.label}</span>
             </div>
           ))}

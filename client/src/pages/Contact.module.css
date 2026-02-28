@@ -9,14 +9,151 @@
   color: var(--mid);
 }
 
-.calendarBox {
-  background: var(--navy);
-  padding: 40px;
+/* Consultation Contact Section */
+.consultationCard {
+  background: linear-gradient(135deg, #0a0f2c, #1a237e);
+  border-radius: 16px;
+  padding: 60px 40px;
   text-align: center;
   margin-bottom: 80px;
-  border-radius: 10px;
-  font-family: var(--mono);
-  color: var(--gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.consultationCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(201, 162, 39, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.consultationCard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.consultationHeading {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+  font-family: var(--serif);
+  line-height: 1.2;
+}
+
+.consultationSubtext {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 40px;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.iconButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+}
+
+.iconButton {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.iconButton.whatsapp {
+  background: #25D366;
+  color: white;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.iconButton.whatsapp:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 25px rgba(37, 211, 102, 0.5);
+}
+
+.iconButton.email {
+  background: #c9a84c;
+  color: white;
+  box-shadow: 0 4px 15px rgba(201, 168, 76, 0.3);
+}
+
+.iconButton.email:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 25px rgba(201, 168, 76, 0.5);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .consultationCard {
+    padding: 40px 25px;
+    margin-bottom: 60px;
+  }
+  
+  .consultationHeading {
+    font-size: 26px;
+    margin-bottom: 14px;
+  }
+  
+  .consultationSubtext {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  
+  .iconButtons {
+    gap: 40px;
+  }
+  
+  .iconButton {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .iconButton svg {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .consultationCard {
+    padding: 35px 20px;
+  }
+  
+  .consultationHeading {
+    font-size: 24px;
+  }
+  
+  .consultationSubtext {
+    font-size: 15px;
+  }
+  
+  .iconButtons {
+    gap: 35px;
+  }
+  
+  .iconButton {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .iconButton svg {
+    width: 36px !important;
+    height: 36px !important;
+  }
 }
 
 .grid {
@@ -34,35 +171,130 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
-.form input,
-.form select,
-.form textarea {
-  padding: 12px;
-  border-radius: 6px;
+/* Field Groups - iPhone-style grouped containers */
+.fieldGroup {
   border: 1px solid var(--mid);
+  border-radius: 10px;
   background: var(--charcoal);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fieldGroup:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Field Pair for side-by-side fields */
+.fieldPair {
+  display: flex;
+  align-items: center;
+}
+
+/* Divider between fields */
+.divider {
+  width: 1px;
+  height: 40px;
+  background: var(--mid);
+  flex-shrink: 0;
+}
+
+/* No border inputs for grouped design */
+.noBorder {
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
   color: var(--white);
   font-family: var(--sans);
+  font-size: 15px;
+  outline: none;
 }
 
-.form input:focus,
-.form select:focus,
-.form textarea:focus {
+.noBorder::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.noBorder:focus {
   outline: none;
-  border-color: var(--gold);
+}
+
+/* Select styling */
+.noBorder select {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+}
+
+.noBorder option {
+  background: var(--charcoal);
+  color: var(--white);
+}
+
+/* Textarea styling */
+.fieldGroup textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 15px;
+  outline: none;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.fieldGroup textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .fieldPair {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .divider {
+    width: 100%;
+    height: 1px;
+  }
+  
+  .noBorder {
+    padding: 12px 16px;
+  }
+  
+  .fieldGroup textarea {
+    min-height: 80px;
+  }
 }
 
 .info {
   background: var(--charcoal);
   padding: 30px;
   border-radius: 10px;
+  color: white;
 }
 
 .info h3 {
   margin-bottom: 20px;
+  color: white;
+}
+
+.info p {
+  color: white;
+  margin-bottom: 8px;
 }
 
 .stats {

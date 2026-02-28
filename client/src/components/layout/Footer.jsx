@@ -1,39 +1,45 @@
 // Footer.jsx
 // Main site footer with 9-platform strip and 4-column footer layout
 
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styles from './Footer.module.css'
+import { FaFacebook, FaInstagram, FaWhatsapp, FaTiktok, FaYoutube, FaLinkedin, FaSnapchat, FaTwitter, FaGlobe } from 'react-icons/fa'
 
 const platforms = [
-  { icon: '📘', name: 'Facebook',    handle: '@imsheikhishtiaq', url: '#' },
-  { icon: '📸', name: 'Instagram',   handle: '@imsheikhishtiaq', url: '#' },
-  { icon: '💬', name: 'WhatsApp',    handle: 'Channel',          url: '#' },
-  { icon: '🎵', name: 'TikTok',      handle: '@imsheikhishtiaq', url: '#' },
-  { icon: '▶️', name: 'YouTube',     handle: '18K+ Subs',        url: '#' },
-  { icon: '💼', name: 'LinkedIn',    handle: '@imsheikhishtiaq', url: '#' },
-  { icon: '👻', name: 'Snapchat',    handle: '@imsheikhishtiaq', url: '#' },
-  { icon: '🐦', name: 'X (Twitter)', handle: '6K+ Followers',    url: '#' },
-  { icon: '🌐', name: 'Website',     handle: 'imsheikhishtiaq.com', url: '#' },
+  { icon: <FaFacebook />, name: 'Facebook',    handle: '@imsheikhishtiaq', url: '#' },
+  { icon: <FaInstagram />, name: 'Instagram',   handle: '@imsheikhishtiaq', url: '#' },
+  { icon: <FaWhatsapp />, name: 'WhatsApp',    handle: 'Channel',          url: '#' },
+  { icon: <FaTiktok />, name: 'TikTok',      handle: '@imsheikhishtiaq', url: '#' },
+  { icon: <FaYoutube />, name: 'YouTube',     handle: '18K+ Subs',        url: '#' },
+  { icon: <FaLinkedin />, name: 'LinkedIn',    handle: '@imsheikhishtiaq', url: '#' },
+  { icon: <FaSnapchat />, name: 'Snapchat',    handle: '@imsheikhishtiaq', url: '#' },
+  { icon: <FaTwitter />, name: 'X (Twitter)', handle: '6K+ Followers',    url: '#' },
+  { icon: <FaGlobe />, name: 'Website',     handle: 'imsheikhishtiaq.com', url: '#' },
 ]
 
 export default function Footer() {
+  const location = useLocation()
+  const isHomePage = location.pathname === '/'
+  
   return (
     <>
       {/* ── 9-PLATFORM STRIP ── */}
-      <div className={styles.platformStrip}>
-        <span className={styles.platformStripTitle}>
-          Follow @imsheikhishtiaq on all 9 platforms
-        </span>
-        <div className={styles.platformGrid}>
-          {platforms.map((p) => (
-            <a key={p.name} href={p.url} className={styles.platformCard}>
-              <span className={styles.platformIcon}>{p.icon}</span>
-              <span className={styles.platformName}>{p.name}</span>
-              <span className={styles.platformHandle}>{p.handle}</span>
-            </a>
-          ))}
+      {isHomePage && (
+        <div className={styles.platformStrip}>
+          <span className={styles.platformStripTitle}>
+            Follow @imsheikhishtiaq on all 9 platforms
+          </span>
+          <div className={styles.platformGrid}>
+            {platforms.map((p) => (
+              <a key={p.name} href={p.url} className={styles.platformCard}>
+                <span className={styles.platformIcon}>{p.icon}</span>
+                <span className={styles.platformName}>{p.name}</span>
+                <span className={styles.platformHandle}>{p.handle}</span>
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── MAIN FOOTER ── */}
       <footer className={styles.footer}>

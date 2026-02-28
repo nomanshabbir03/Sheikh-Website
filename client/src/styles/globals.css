@@ -143,6 +143,7 @@ div[class*="Header"] {
 }
 .btn-gold:hover {
   background: var(--gold-lt);
+  color: white;
   transform: translateY(-2px);
 }
 

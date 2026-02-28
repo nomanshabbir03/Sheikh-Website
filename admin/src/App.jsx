@@ -15,6 +15,7 @@ import Insights     from './pages/Insights'
 import Courses      from './pages/Courses'
 import Testimonials from './pages/Testimonials'
 import Media        from './pages/Media'
+import Videos       from './pages/Videos'
 
 // Layout
 import AdminLayout  from './components/AdminLayout'
@@ -59,6 +60,7 @@ function AppRoutes() {
         </ProtectedRoute>
       }>
         <Route index          element={<Dashboard />} />
+        <Route path="videos"       element={<Videos />} />
         <Route path="contacts"     element={<Contacts />} />
         <Route path="bookings"     element={<Bookings />} />
         <Route path="insights"     element={<Insights />} />

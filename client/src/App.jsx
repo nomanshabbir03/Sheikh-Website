@@ -4,9 +4,12 @@
 import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Layout from './components/layout/Layout'
+import ScrollToTop from './components/layout/ScrollToTop'
+import FloatingWhatsApp from './components/FloatingWhatsApp'
 import Home       from './pages/Home'
 import About      from './pages/About'
 import Insights   from './pages/Insights'
+import InsightDetail from './pages/InsightDetail'
 import Consulting from './pages/Consulting'
 import Visa       from './pages/Visa'
 import TGD        from './pages/TGD'
@@ -17,6 +20,8 @@ import './styles/globals.css'
 export default function App() {
   return (
     <>
+      <ScrollToTop />
+      <FloatingWhatsApp />
       <Toaster
         position="top-right"
         toastOptions={{
@@ -37,6 +42,7 @@ export default function App() {
           <Route path="/"           element={<Home />} />
           <Route path="/about"      element={<About />} />
           <Route path="/insights"   element={<Insights />} />
+          <Route path="/insights/:slug" element={<InsightDetail />} />
           <Route path="/consulting" element={<Consulting />} />
           <Route path="/visa"       element={<Visa />} />
           <Route path="/tgd"        element={<TGD />} />

@@ -14,6 +14,7 @@ import contactRoutes  from './routes/contact.js'
 import bookingRoutes  from './routes/bookings.js'
 import insightRoutes  from './routes/insights.js'
 import courseRoutes   from './routes/courses.js'
+import adminRoutes    from './routes/admin.js'
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler.js'
@@ -31,14 +32,27 @@ const PORT = process.env.PORT || 5000
 // Security headers
 app.use(helmet())
 
-// CORS — allow client and admin origins
+// CORS — dynamic localhost support for development
 app.use(cors({
-  origin: [
-    process.env.CLIENT_URL  || 'http://localhost:5173',
-    process.env.ADMIN_URL   || 'http://localhost:5174',
-  ],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true)
+    // Allow any localhost port during development
+    if (origin.startsWith('http://localhost:')) {
+      return callback(null, true)
+    }
+    // In production allow specific domains from env
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      process.env.ADMIN_URL,
+    ].filter(Boolean)
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true)
+    }
+    callback(new Error('Not allowed by CORS'))
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
 }))
 
 // Request logging
@@ -95,6 +109,7 @@ app.use('/api/contact',  contactRoutes)
 app.use('/api/bookings', bookingRoutes)
 app.use('/api/insights', insightRoutes)
 app.use('/api/courses',  courseRoutes)
+app.use('/api/admin',    adminRoutes)
 
 // ── 404 handler for unknown routes ──
 app.use((req, res) => {

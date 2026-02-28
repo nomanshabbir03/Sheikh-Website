@@ -13,7 +13,7 @@ export async function listInsights(req, res, next) {
 
     let query = supabase
       .from('insights')
-      .select('id, title, slug, excerpt, category, thumbnail_url, is_featured, read_time, views, author, created_at')
+      .select('id, title, slug, excerpt, category, cover_image_url, is_featured, read_time, views, author, created_at')
       .eq('is_published', true)
       .order('created_at', { ascending: false })
       .range(from, to)
@@ -73,7 +73,7 @@ export async function getFeaturedInsights(req, res, next) {
   try {
     const { data, error } = await supabase
       .from('insights')
-      .select('id, title, slug, excerpt, category, thumbnail_url, read_time, views, created_at')
+      .select('id, title, slug, excerpt, category, cover_image_url, read_time, views, created_at')
       .eq('is_published', true)
       .eq('is_featured', true)
       .order('created_at', { ascending: false })

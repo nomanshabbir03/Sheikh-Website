@@ -1,0 +1,149 @@
+/* VisaConsultancySection.module.css
+   Visa Consultancy section with dark navy gradient, Statue of Liberty silhouette, and Lottie plane animation
+*/
+
+.visaSection {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 80px 0;
+}
+
+.visaSection:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+.visaBackground {
+  position: relative;
+  min-height: 300px;
+  background: linear-gradient(135deg, #0F3460 0%, #16213E 50%, #1A1A2E 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Statue of Liberty silhouette as subtle background */
+  background-image: 
+    linear-gradient(135deg, rgba(15, 52, 96, 0.9) 0%, rgba(22, 33, 62, 0.85) 50%, rgba(26, 26, 46, 0.9) 100%),
+    url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+}
+
+.planeAnimation {
+  position: absolute;
+  top: 50%;
+  left: -10%;
+  transform: translateY(-50%);
+  font-size: 60px;
+  animation: flyAcross 4s linear infinite;
+  z-index: 2;
+}
+
+@keyframes flyAcross {
+  0% {
+    left: -10%;
+    transform: translateY(-50%) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-60%) rotate(0deg);
+  }
+  100% {
+    left: 110%;
+    transform: translateY(-50%) rotate(5deg);
+  }
+}
+
+.visaContent {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 40px 20px;
+  color: #c9a227;
+}
+
+.visaTitle {
+  font-family: var(--serif);
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: #c9a227;
+}
+
+.visaTitle em {
+  font-style: italic;
+  color: #c9a227;
+}
+
+.visaSubtitle {
+  font-family: var(--sans);
+  font-size: clamp(16px, 2.5vw, 20px);
+  font-weight: 400;
+  margin: 0;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  color: #c9a227;
+}
+
+.ctaButton {
+  margin-top: 24px;
+  background-color: #c9a227;   /* Gold button */
+  color: #000;                 /* Black text */
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #b8921d;   /* Darker gold on hover */
+  transform: translateY(-2px);
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .visaSection {
+    margin: 60px 0;
+  }
+  
+  .visaBackground {
+    min-height: 250px;
+  }
+  
+  .planeAnimation {
+    font-size: 45px;
+  }
+  
+  .visaContent {
+    padding: 30px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .visaSection {
+    margin: 40px 0;
+  }
+  
+  .visaBackground {
+    min-height: 200px;
+  }
+  
+  .planeAnimation {
+    font-size: 35px;
+  }
+  
+  .visaContent {
+    padding: 20px 10px;
+  }
+}

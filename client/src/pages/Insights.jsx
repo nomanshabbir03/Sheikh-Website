@@ -1,15 +1,15 @@
 // Insights.jsx
-// Insights & Videos page — fetches posts and videos from Supabase
-// Includes category filter bar, featured post, post grid, video list, sidebar
+// Insights & Analysis page — articles only, no videos
+// Includes category filter bar, featured article, article grid, sidebar
 
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { supabase } from '../lib/supabase'
 import styles from './Insights.module.css'
 
 // ── Filter categories ──
-const categories = ['All', 'Geopolitics', 'Business', 'Self-Development', 'Vlogs', 'Shorts']
+const categories = ['All', 'Geopolitics', 'Business', 'Self-Development']
 
 // ── Fallback posts if Supabase returns nothing ──
 const fallbackPosts = [
@@ -59,12 +59,6 @@ const fallbackPosts = [
   },
 ]
 
-// ── Fallback videos ──
-const fallbackVideos = [
-  { id: 1, title: 'Why the Middle East Shift Matters for Pakistan Economy', category: 'Geopolitics',       views: '48K', duration: '18:42' },
-  { id: 2, title: 'How to Read Global Markets Before They Move',            category: 'Business Strategy', views: '22K', duration: '12:15' },
-  { id: 3, title: 'The 3 Mental Models Every Leader Needs Right Now',       category: 'Self-Growth',       views: '15K', duration: '09:30' },
-]
 
 // ── Popular sidebar items ──
 const popularItems = [
@@ -73,17 +67,30 @@ const popularItems = [
   { title: 'Gulf 2030: What Pakistanis Must Know Before Moving',     reads: '18K reads' },
 ]
 
+// ── Category icons map ──
+const categoryIcons = {
+  Geopolitics: '🌍',
+  Business: '💼',
+  'Self-Development': '🧠',
+  Default: '📝',
+}
+
+// ── Get category icon ──
+function getCategoryIcon(category) {
+  return categoryIcons[category] || categoryIcons.Default
+}
+
 // ══════════════════════════════════════════════
 // INSIGHTS PAGE COMPONENT
 // ══════════════════════════════════════════════
 export default function Insights() {
+  const navigate = useNavigate()
   const [activeFilter, setActiveFilter] = useState('All')
-  const [posts, setPosts]               = useState([])
-  const [videos, setVideos]             = useState([])
+  const [posts, setPosts] = useState([])
+  const [popularPosts, setPopularPosts] = useState([])
   const [postsLoading, setPostsLoading] = useState(true)
-  const [videosLoading, setVideosLoading] = useState(true)
-  const [email, setEmail]               = useState('')
-  const [subscribing, setSubscribing]   = useState(false)
+  const [email, setEmail] = useState('')
+  const [subscribing, setSubscribing] = useState(false)
 
   // ── Fetch insights / posts ──
   useEffect(() => {
@@ -94,7 +101,7 @@ export default function Insights() {
           .select('*')
           .eq('is_published', true)
           .order('created_at', { ascending: false })
-          .limit(6)
+          .limit(20)
 
         if (activeFilter !== 'All') {
           query = query.eq('category', activeFilter)
@@ -112,27 +119,26 @@ export default function Insights() {
     fetchPosts()
   }, [activeFilter])
 
-  // ── Fetch videos ──
+  // ── Fetch popular posts ──
   useEffect(() => {
-    async function fetchVideos() {
+    async function fetchPopularPosts() {
       try {
         const { data, error } = await supabase
-          .from('videos')
+          .from('insights')
           .select('*')
           .eq('is_published', true)
-          .order('created_at', { ascending: false })
+          .order('views', { ascending: false })
           .limit(3)
 
         if (error) throw error
-        setVideos(data && data.length > 0 ? data : fallbackVideos)
+        setPopularPosts(data || [])
       } catch {
-        setVideos(fallbackVideos)
-      } finally {
-        setVideosLoading(false)
+        setPopularPosts([])
       }
     }
-    fetchVideos()
+    fetchPopularPosts()
   }, [])
+
 
   // ── Email subscribe ──
   async function handleSubscribe(e) {
@@ -142,7 +148,7 @@ export default function Insights() {
     try {
       const { error } = await supabase
         .from('subscribers')
-        .insert([{ email, source: 'insights_page' }])
+        .insert([{ email, source: 'insights_sidebar' }])
 
       if (error) {
         if (error.code === '23505') {
@@ -161,18 +167,14 @@ export default function Insights() {
     }
   }
 
-  // ── Split posts into featured + rest ──
-  const featuredPost = posts.find((p) => p.is_featured) || posts[0]
-  const gridPosts    = posts.filter((p) => p.id !== featuredPost?.id).slice(0, 4)
-
-  // ── Category icons map ──
-  const categoryIcons = {
-    Geopolitics:      '🌍',
-    Business:         '💵',
-    'Self-Development': '🧠',
-    Vlogs:            '🎥',
-    Shorts:           '⚡',
+  // ── Handle article click ──
+  function handleArticleClick(slug) {
+    navigate(`/insights/${slug}`)
   }
+
+  // ── Split posts into featured + rest ──
+  const featuredPost = posts.find((p) => p.is_featured)
+  const gridPosts = featuredPost ? posts.filter((p) => p.id !== featuredPost.id) : posts
 
   // ══════════════════════════════════════════════
   // RENDER
@@ -183,9 +185,9 @@ export default function Insights() {
       <div className="page-header">
         <div className="page-header-glow" />
         <div className="page-header-inner">
-          <span className="eyebrow">Insights &amp; Videos</span>
+          <span className="eyebrow">KNOWLEDGE HUB</span>
           <h1 className="display-title" style={{ color: 'var(--white)' }}>
-            Analysis That <em>Moves</em> You Forward.
+            Insights &amp; Analysis
           </h1>
           <p style={{
             color: 'rgba(255,255,255,0.55)',
@@ -193,10 +195,7 @@ export default function Insights() {
             maxWidth: '540px',
             marginTop: '8px',
           }}>
-            Long-form analysis, short clips, vlogs, and breakdowns — built for
-            people who act on what they know. Follow{' '}
-            <span style={{ color: 'var(--gold)' }}>@imsheikhishtiaq</span>{' '}
-            for daily content.
+            Deep dives into geopolitics, business strategy and personal growth by Sheikh Ishtiaq
           </p>
         </div>
       </div>
@@ -225,54 +224,95 @@ export default function Insights() {
           <div className={styles.contentLayout}>
 
             {/* ── Main Column ── */}
-            <div>
+            <div className={styles.mainColumn}>
               {postsLoading ? (
-                <div className={styles.loadingState}>Loading insights...</div>
+                <div className={styles.loadingState}>
+                  <div className={styles.skeletonCard} />
+                  <div className={styles.skeletonCard} />
+                  <div className={styles.skeletonCard} />
+                  <div className={styles.skeletonCard} />
+                </div>
               ) : posts.length === 0 ? (
                 <div className={styles.emptyState}>
-                  No posts found in this category yet.
+                  <div className={styles.emptyIcon}>📝</div>
+                  <h3>No articles in this category yet</h3>
+                  <p>Check back soon for new insights</p>
                 </div>
               ) : (
                 <>
-                  {/* Featured Post */}
+                  {/* Featured Article */}
                   {featuredPost && (
-                    <div className={styles.featuredPost}>
-                      <div className={styles.featuredPostImg}>
-                        <span className={styles.featuredBadge}>📌 Pinned This Week</span>
-                        {categoryIcons[featuredPost.category] || '🌍'}
+                    <div 
+                      className={styles.featuredArticle}
+                      onClick={() => handleArticleClick(featuredPost.slug)}
+                    >
+                      <div className={styles.featuredImage}>
+                        {featuredPost.cover_image_url ? (
+                          <img 
+                            src={featuredPost.cover_image_url} 
+                            alt={featuredPost.title}
+                            className={styles.featuredImageImg}
+                          />
+                        ) : (
+                          <div className={styles.featuredImagePlaceholder}>
+                            📰
+                          </div>
+                        )}
+                        <span className={styles.featuredBadge}>📌 FEATURED</span>
                       </div>
-                      <div className={styles.featuredPostBody}>
-                        <span className={styles.postTag}>
-                          {featuredPost.category}
-                        </span>
-                        <h3>{featuredPost.title}</h3>
-                        <p>{featuredPost.excerpt}</p>
-                        <p className={styles.featuredMeta}>
-                          {featuredPost.read_time && `${featuredPost.read_time} min read`}
-                          {featuredPost.views && ` · ${featuredPost.views.toLocaleString()} views`}
-                        </p>
-                        <a href="#" className="btn-gold" style={{ fontSize: '13px', padding: '10px 20px' }}>
-                          Read Full Analysis →
-                        </a>
+                      <div className={styles.featuredContent}>
+                        <span className={styles.categoryTag}>{featuredPost.category}</span>
+                        <h2 className={styles.featuredTitle}>{featuredPost.title}</h2>
+                        <p className={styles.featuredExcerpt}>{featuredPost.excerpt}</p>
+                        <div className={styles.featuredMeta}>
+                          <div className={styles.authorRow}>
+                            <div>
+                              <div className={styles.authorName}>{featuredPost.author || 'Sheikh Ishtiaq'}</div>
+                              <div className={styles.articleMeta}>
+                                {featuredPost.read_time} min read · {new Date(featuredPost.created_at).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <button className={styles.readButton}>Read Article →</button>
                       </div>
                     </div>
                   )}
 
-                  {/* Post Grid */}
+                  {/* Articles Grid */}
                   {gridPosts.length > 0 && (
-                    <div className={styles.postGrid}>
+                    <div className={styles.articlesGrid}>
                       {gridPosts.map((post) => (
-                        <div key={post.id} className={styles.postCard}>
-                          <div className={styles.postCardImg}>
-                            {categoryIcons[post.category] || '📝'}
+                        <div 
+                          key={post.id} 
+                          className={styles.articleCard}
+                          onClick={() => handleArticleClick(post.slug)}
+                        >
+                          <div className={styles.cardImageArea}>
+                            {post.cover_image_url ? (
+                              <div 
+                                className={styles.cardImage}
+                                style={{ backgroundImage: `url(${post.cover_image_url})` }}
+                              />
+                            ) : (
+                              <div className={styles.cardImagePlaceholder}>
+                                {getCategoryIcon(post.category)}
+                              </div>
+                            )}
+                            <span className={styles.cardCategoryBadge}>{post.category}</span>
                           </div>
-                          <div className={styles.postCardBody}>
-                            <span className={styles.postTag}>{post.category}</span>
-                            <h4>{post.title}</h4>
-                            <p className={styles.postCardMeta}>
-                              {post.read_time && `${post.read_time} min read`}
-                              {post.views && ` · ${post.views.toLocaleString()} views`}
-                            </p>
+                          <div className={styles.cardBody}>
+                            <h3 className={styles.cardTitle}>{post.title}</h3>
+                            <p className={styles.cardExcerpt}>{post.excerpt}</p>
+                            <div className={styles.cardFooter}>
+                              <div className={styles.cardAuthor}>
+                                <span className={styles.cardAuthorName}>{post.author || 'Sheikh Ishtiaq'}</span>
+                              </div>
+                              <div className={styles.cardMeta}>
+                                <span className={styles.readTime}>{post.read_time} min</span>
+                                <span className={styles.views}>{post.views || 0}</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -280,41 +320,61 @@ export default function Insights() {
                   )}
                 </>
               )}
-
-              {/* ── Video List ── */}
-              <div className={styles.videoStrip}>
-                <h3 className={styles.videoStripTitle}>Latest Videos</h3>
-                {videosLoading ? (
-                  <div className={styles.loadingState}>Loading videos...</div>
-                ) : (
-                  <div className={styles.videoList}>
-                    {videos.map((v) => (
-                      <div key={v.id} className={styles.videoListItem}>
-                        <div className={styles.videoThumbSmall}>▶</div>
-                        <div className={styles.videoListInfo}>
-                          <p className={styles.videoListCategory}>{v.category}</p>
-                          <p className={styles.videoListTitle}>{v.title}</p>
-                          <p className={styles.videoListMeta}>
-                            {v.views && `${v.views} views`}
-                            {v.duration && ` · ${v.duration}`}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
 
             {/* ── Sidebar ── */}
             <div className={styles.sidebar}>
-
-              {/* Email subscribe */}
+              {/* About Sheikh Ishtiaq */}
               <div className={styles.sidebarBox}>
-                <h4>Weekly Brief</h4>
-                <p className={styles.sidebarDesc}>
-                  Sheikh Ishtiaq's curated analysis — every Sunday.
-                </p>
+                <div className={styles.aboutSection}>
+                  <h4>Sheikh Ishtiaq</h4>
+                  <p className={styles.aboutTitle}>The Growth Strategist</p>
+                  <p className={styles.aboutBio}>Strategic advisor helping leaders navigate complexity and unlock growth opportunities.</p>
+                  <a 
+                    href="https://instagram.com/imsheikhishtiaq" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={styles.followButton}
+                  >
+                    Follow on Instagram
+                  </a>
+                </div>
+              </div>
+
+              {/* Popular Articles */}
+              <div className={styles.sidebarBox}>
+                <h4 className={styles.sidebarTitle}>Most Read</h4>
+                {popularPosts.length > 0 ? (
+                  popularPosts.map((post, i) => (
+                    <div 
+                      key={post.id} 
+                      className={styles.popularItem}
+                      onClick={() => handleArticleClick(post.slug)}
+                    >
+                      <span className={styles.popularNum}>{i + 1}</span>
+                      <div className={styles.popularContent}>
+                        <h5>{post.title}</h5>
+                        <span>{post.read_time} min read</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  popularItems.map((item, i) => (
+                    <div key={i} className={styles.popularItem}>
+                      <span className={styles.popularNum}>{i + 1}</span>
+                      <div className={styles.popularContent}>
+                        <h5>{item.title}</h5>
+                        <span>{item.reads}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Newsletter Subscribe */}
+              <div className={styles.sidebarBox}>
+                <h4 className={styles.sidebarTitle}>Get Insights in Your Inbox</h4>
+                <p className={styles.sidebarDesc}>Weekly analysis delivered to you</p>
                 <form onSubmit={handleSubscribe}>
                   <input
                     type="email"
@@ -329,66 +389,28 @@ export default function Insights() {
                     className={styles.sidebarSubmit}
                     disabled={subscribing}
                   >
-                    {subscribing ? 'Subscribing...' : 'Subscribe Free →'}
+                    {subscribing ? 'Subscribing...' : 'Subscribe'}
                   </button>
                 </form>
               </div>
 
-              {/* Popular posts */}
-              <div className={styles.sidebarBox}>
-                <h4>Most Popular</h4>
-                {popularItems.map((item, i) => (
-                  <div key={i} className={styles.popularItem}>
-                    <span className={styles.popularNum}>0{i + 1}</span>
-                    <div>
-                      <h5>{item.title}</h5>
-                      <span>{item.reads}</span>
-                    </div>
-                  </div>
-                ))}
+              {/* Join WhatsApp */}
+              <div className={styles.sidebarBoxGold}>
+                <h4 className={styles.sidebarBoxGoldTitle}>Join 2K+ Members on WhatsApp</h4>
+                <a 
+                  href="https://whatsapp.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.whatsappButton}
+                >
+                  Join Channel →
+                </a>
               </div>
-
-              {/* WhatsApp */}
-              <div className={styles.sidebarBox}>
-                <h4>Join WhatsApp Channel</h4>
-                <p className={styles.sidebarDesc}>
-                  Daily insights from @imsheikhishtiaq — directly on WhatsApp.
-                </p>
-                <button className={styles.whatsappBtn}>
-                  💬 Join @imsheikhishtiaq
-                </button>
-              </div>
-
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── CTA BANNER ─── */}
-      <div style={{
-        background: 'var(--gold)',
-        padding: '56px 6%',
-        textAlign: 'center',
-      }}>
-        <h2 style={{
-          fontFamily: 'var(--serif)',
-          fontSize: 'clamp(22px, 4vw, 36px)',
-          color: 'var(--ink)',
-          marginBottom: '10px',
-        }}>
-          Want Analysis Tailored to Your Situation?
-        </h2>
-        <p style={{
-          color: 'rgba(13,13,13,0.7)',
-          marginBottom: '24px',
-          fontSize: '15px',
-        }}>
-          Book a 1-on-1 session with Sheikh Ishtiaq for personalised strategic clarity.
-        </p>
-        <Link to="/contact" className="btn-dark">
-          Book a Consultation →
-        </Link>
-      </div>
     </>
   )
 }

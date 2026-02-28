@@ -241,7 +241,13 @@
   background: rgba(201,162,39,0.08);
 }
 
-.platformItemIcon   { font-size: 20px; }
+.platformItemIcon   { 
+  font-size: 20px; 
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .platformItemName   { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
 .platformItemCount  { font-family: var(--serif); font-size: 13px; font-weight: 700; color: var(--gold); }
 
@@ -387,7 +393,7 @@
   font-family: var(--serif);
   font-size: 38px;
   font-weight: 700;
-  color: rgba(201,162,39,0.2);
+  color: rgba(201,162,39,0.8);
   line-height: 1;
   margin-bottom: 14px;
 }

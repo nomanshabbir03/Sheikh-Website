@@ -18,9 +18,9 @@
 }
 
 .filterBtn {
-  background: transparent;
-  border: 1px solid var(--mid);
-  color: var(--white);
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--ink);
   padding: 8px 18px;
   border-radius: 20px;
   cursor: pointer;
@@ -30,8 +30,7 @@
 }
 
 .filterBtn:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+  color: var(--white);
 }
 
 .active {
@@ -72,15 +71,20 @@
   padding: 20px;
 }
 
+.content h3 {
+  color: white;
+  margin-bottom: 8px;
+}
+
 .meta {
   font-size: 13px;
-  color: var(--mid);
+  color: var(--gold);
   margin: 8px 0;
 }
 
 .description {
   font-size: 14px;
-  color: var(--mid);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .pressStrip {
@@ -103,6 +107,18 @@
   text-align: center;
   padding: 60px 20px;
   border-radius: 12px;
+  color: white;
+}
+
+.cta h2 {
+  color: white;
+  margin-bottom: 16px;
+}
+
+.cta p {
+  color: white;
+  margin-bottom: 24px;
+  opacity: 0.9;
 }
 
 .message {

@@ -7,14 +7,17 @@ import Sidebar from './Sidebar'
 
 export default function AdminLayout() {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#111827' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100vw', background: '#111827', overflow: 'hidden' }}>
       <Sidebar />
       <main style={{
         marginLeft: '240px',
-        flex: 1,
-        padding: '32px',
+        width: 'calc(100vw - 240px)',
         minHeight: '100vh',
-        overflow: 'auto',
+        padding: '32px',
+        boxSizing: 'border-box',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        background: '#111827'
       }}>
         <Outlet />
       </main>
